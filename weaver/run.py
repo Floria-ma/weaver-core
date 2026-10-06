@@ -16,6 +16,7 @@ if __name__=='__main__':
     # settings based on user
     user = os.getenv('USER')
     miniforge = None
+    activate_cmd = None  # full activation command, for setups not using 'conda activate'
     loc = 'oscar'
     if user=='llambre1.brown':
         miniforge = '/blue/avery/llambre1.brown/miniforge3/bin/activate'
@@ -26,20 +27,30 @@ if __name__=='__main__':
     if user=='tgillin':
         miniforge = '/users/tgillin/miniconda3/etc/profile.d/conda.sh'
         loc = 'oscar'
+    if user=='zima':
+        # micromamba: 'conda activate' is not available, use the shell hook instead
+        activate_cmd = ('export MAMBA_ROOT_PREFIX=/eos/user/z/zima/micromamba'
+                        ' && eval "$(/afs/cern.ch/user/z/zima/.local/bin/micromamba shell hook -s bash)"'
+                        ' && micromamba activate /eos/user/z/zima/micromamba/envs/weaver')
+        loc = 'lxplus'
+    if activate_cmd is None:
+        activate_cmd = f'source {miniforge} && conda activate weaver'
 
     # common settings
     weaverdir = os.path.join(weavercoredir, 'weaver')
     
     # data config
     #data_config = os.path.abspath('configs/configs_part/standardized/data_config_parttagger_withstrange_withdedx_masked.yaml') # standard part without secondary vertices or V0 cands
-    data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0.yaml') # everything included
+    data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0_nosvv0.yaml') # particles only, no secondary vertices or V0 cands
+    #data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0.yaml') # everything included
     #data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0_withdedx_masked.yaml') # masked dEdx
     #data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0_extrafeatures_test.yaml') # test new input features
     #data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0_withdedx_masked_extrafeatures_test.yaml') # test new input features with masked dEdx
 
     # model config
     #model_config = os.path.abspath('configs/configs_part/model_config_parttagger.py')
-    model_config = os.path.abspath('configs/configs_parttaggerwithv0/model_config_parttaggerwithv0.py')
+    model_config = os.path.abspath('configs/configs_parttaggerwithv0/model_config_parttaggerwithv0_nosvv0.py') # particles only
+    #model_config = os.path.abspath('configs/configs_parttaggerwithv0/model_config_parttaggerwithv0.py')
     
     # sample list for training data
     sample_config_train = os.path.abspath(f'configs/samplelists/{loc}/samples_training.yaml')
@@ -49,7 +60,7 @@ if __name__=='__main__':
     
     # output dir
     #output_base = thisdir
-    output_base = '/eos/user/l/llambrec/aleph-weaver-output'
+    output_base = '/eos/user/z/zima/aleph-weaver-output'
     outputdir = os.path.join(output_base, 'output_test_withksnew_nepochs_30_nsteps_300')
     
     # network settings
@@ -64,7 +75,8 @@ if __name__=='__main__':
     #gpus = None
 
     # check if all config files exist
-    files_to_check = [data_config, model_config, sample_config_train, sample_config_test, miniforge]
+    files_to_check = [data_config, model_config, sample_config_train, sample_config_test]
+    if miniforge is not None: files_to_check.append(miniforge)
     for f in files_to_check:
         if not os.path.exists(f):
             raise Exception('File {} does not exist.'.format(f))
@@ -115,8 +127,7 @@ if __name__=='__main__':
 
     elif runmode=='condor':
         condor_options = {
-            'conda_activate': f'source {miniforge}',
-            'conda_env': 'weaver',
+            'conda_activate': activate_cmd,
             'jobflavour': 'tomorrow',
             'cpus': 4,
             'mem': 32000,
@@ -133,8 +144,7 @@ if __name__=='__main__':
         if os.path.exists(slurmscript):
             os.remove(slurmscript)
         env_cmds = ([
-          f'source {miniforge}',
-          'conda activate weaver',
+          activate_cmd,
           f'cd {thisdir}'
         ])
         job_name = os.path.splitext(slurmscript)[0]
