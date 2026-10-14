@@ -41,7 +41,10 @@ if __name__=='__main__':
     
     # data config
     #data_config = os.path.abspath('configs/configs_part/standardized/data_config_parttagger_withstrange_withdedx_masked.yaml') # standard part without secondary vertices or V0 cands
-    data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0_nosvv0.yaml') # particles only, no secondary vertices or V0 cands
+    
+    #data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0_nosvv0.yaml') # particles only, no secondary vertices or V0 cands
+    data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0_4class.yaml') # particles only, no secondary vertices or V0 cands, masked dEdx
+    
     #data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0.yaml') # everything included
     #data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0_withdedx_masked.yaml') # masked dEdx
     #data_config = os.path.abspath('configs/configs_parttaggerwithv0/standardized/data_config_parttaggerwithv0_extrafeatures_test.yaml') # test new input features
@@ -61,7 +64,7 @@ if __name__=='__main__':
     # output dir
     #output_base = thisdir
     output_base = '/eos/user/z/zima/aleph-weaver-output'
-    outputdir = os.path.join(output_base, 'output_test_withksnew_nepochs_30_nsteps_300')
+    outputdir = os.path.join(output_base, 'output_test_4class_nepochs_30_nsteps_300')
     
     # network settings
     num_epochs = 30

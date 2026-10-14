@@ -30,66 +30,30 @@ if __name__=='__main__':
     treename = 'Events'
     signal_categories = {
         'b': {
-            'label_branch': 'recojet_match_isB',
-            'score_branch': 'score_recojet_match_isB',
+            'label_branch': 'recojet_isB',
+            'score_branch': 'score_recojet_isB',
             'color': 'red',
             'label': r'$b$-jets'
         },
-        'bbar': {
-            'label_branch': 'recojet_match_isBbar',
-            'score_branch': 'score_recojet_match_isBbar',
-            'color': 'orange',
-            'label': r'$\bar{b}$-jets'
-        },
         'c': {
-            'label_branch': 'recojet_match_isC',
-            'score_branch': 'score_recojet_match_isC',
+            'label_branch': 'recojet_isC',
+            'score_branch': 'score_recojet_isC',
             'color': 'purple',
             'label': r'$c$-jets'
         },
-        'cbar': {
-            'label_branch': 'recojet_match_isCbar',
-            'score_branch': 'score_recojet_match_isCbar',
-            'color': 'brown',
-            'label': r'$\bar{c}$-jets'
-        },
         's': {
-            'label_branch': 'recojet_match_isS',
-            'score_branch': 'score_recojet_match_isS',
+            'label_branch': 'recojet_isS',
+            'score_branch': 'score_recojet_isS',
             'color': 'blue',
             'label': r'$s$-jets'
-        },
-        'sbar': {
-            'label_branch': 'recojet_match_isSbar',
-            'score_branch': 'score_recojet_match_isSbar',
-            'color': 'cyan',
-            'label': r'$\bar{s}$-jets'
         }
     }
     background_categories = {
-        'u': {
-            'label_branch': 'recojet_match_isU',
-            'score_branch': 'score_recojet_match_isU',
+        'ud': {
+            'label_branch': 'recojet_isUDG',
+            'score_branch': 'score_recojet_isUDG',
             'color': 'green',
-            'label': r'$u$-jets'
-        },
-        'ubar': {
-            'label_branch': 'recojet_match_isUbar',
-            'score_branch': 'score_recojet_match_isUbar',
-            'color': 'lightgreen',
-            'label': r'$\bar{u}$-jets'
-        },
-        'd': {
-            'label_branch': 'recojet_match_isD',
-            'score_branch': 'score_recojet_match_isD',
-            'color': 'magenta',
-            'label': r'$d$-jets'
-        },
-        'dbar': {
-            'label_branch': 'recojet_match_isDbar',
-            'score_branch': 'score_recojet_match_isDbar',
-            'color': 'pink',
-            'label': r'$\bar{d}$-jets'
+            'label': r'$ud$-jets'
         }
     }
     all_categories = {**signal_categories, **background_categories}

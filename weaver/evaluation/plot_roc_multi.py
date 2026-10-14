@@ -88,7 +88,9 @@ def plot_scores_multi(events,
             lh.set_alpha(1)
             lh._sizes = [30]
         fig.tight_layout()
-        figname = os.path.join(outputdir, f'{score_branch}.png')
+        # use category name if score branch is an expression (not a valid filename)
+        figbase = score_branch if score_branch.isidentifier() else f'score_{score_name}'
+        figname = os.path.join(outputdir, f'{figbase}.png')
         fig.savefig(figname)
         print(f'Saved figure {figname}.')
     
@@ -96,7 +98,7 @@ def plot_scores_multi(events,
         ax.autoscale()
         ax.set_yscale('log')
         fig.tight_layout()
-        figname = os.path.join(outputdir, f'{score_branch}_log.png')
+        figname = os.path.join(outputdir, f'{figbase}_log.png')
         fig.savefig(figname)
         print(f'Saved figure {figname}.')
         plt.close()

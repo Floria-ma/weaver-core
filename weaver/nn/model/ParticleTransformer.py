@@ -445,6 +445,10 @@ class Block(nn.Module):
         else:
             residual = x
             x = self.pre_attn_norm(x)
+            if attn_mask is not None and padding_mask is not None and padding_mask.dtype == torch.bool:
+                # match the float attn_mask type to avoid the mismatched-mask deprecation warning
+                padding_mask = torch.zeros_like(padding_mask, dtype=attn_mask.dtype).masked_fill(
+                    padding_mask, float('-inf'))
             x = self.attn(x, x, x, key_padding_mask=padding_mask,
                           attn_mask=attn_mask)[0]  # (seq_len, batch, embed_dim)
 
